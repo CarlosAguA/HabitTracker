@@ -151,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method that rads dummy Data in the Lifestyle database / habits table.
+     */
     public Cursor read(){
 
         /* Create and/or open a database to read from it */
