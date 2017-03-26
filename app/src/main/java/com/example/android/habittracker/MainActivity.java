@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.android.habittracker.data.HabitContract;
 import com.example.android.habittracker.data.HabitContract.HabitEntry;
 import com.example.android.habittracker.data.HabitDbHelper;
 
@@ -17,6 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
     /** Database helper that will provide us access to the database */
     private HabitDbHelper mDbHelper;
+
+    /* Cursor instance that will get a value assigned when the read method from HabitDBHelper class is called. */
+    Cursor cursor ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
                 insertPet();
                 displayDatabaseInfo();
+                cursor = read() ;
 
             }
         });
@@ -143,6 +148,34 @@ public class MainActivity extends AppCompatActivity {
 
         /* Insert a new row for Habit: Swimming in the database, returning the ID of that new row. */
         db.insert(HabitEntry.TABLE_NAME, null, values);
+
+    }
+
+    public Cursor read(){
+
+        /* Create and/or open a database to read from it */
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        /* The projection means the columns the cursor object will return */
+        String[] projection = {
+                HabitContract.HabitEntry._ID,
+                HabitContract.HabitEntry.COLUMN_HABIT_NAME,
+                HabitContract.HabitEntry.COLUMN_HABIT_HOURS,
+                HabitContract.HabitEntry.COLUMN_HABIT_COST,
+                HabitContract.HabitEntry.COLUMN_HABIT_INCOME ,
+                HabitContract.HabitEntry.COLUMN_HABIT_DESCRIPTION};
+
+        /* Query method : Create cursor object for retrieving the row of the table */
+        Cursor cursor = db.query(
+                HabitContract.HabitEntry.TABLE_NAME,          // The table to query
+                projection,                    // The columns to return
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        return cursor ;
 
     }
 }
